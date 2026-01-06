@@ -3,10 +3,10 @@ const display = document.querySelector(".display-input");
 const operatorButtons = document.querySelectorAll(".operator");
 const equalButton = document.querySelector(".equal");
 
-let first = "";
-let second = "";
+let firstInput = "";
+let secondInput = "";
 let op = "";
-const resetDisplay = false;
+let result = "";
 
 function add(a, b) {
   return a + b;
@@ -37,28 +37,40 @@ function numInput() {
       display.textContent += numList[i].textContent;
     });
   }
-
 }
 
 function operator() {
   for (let i = 0; i < operatorButtons.length; i++) {
     operatorButtons[i].addEventListener("click", () => {
+      firstInput = Number(display.textContent);
+      console.log(firstInput);
       op = operatorButtons[i].textContent;
-      display.textContent = op;
+      console.log(op);
+      display.textContent = "";
     });
-
   }
+}
 
+function equal() {
+  equalButton.addEventListener("click", () => {
+    secondInput = Number(display.textContent);
 
-  
+    result = operate(Number(firstInput), secondInput, op);
+
+    display.textContent = result;
+
+    firstInput = result;
+  });
 }
 
 numInput();
 operator();
-operate();
+equal();
 
-    if (op) {
-    resetDisplay = true;
-    display.textContent = "";
-    
-  }
+
+//1. Insert first num
+//2. pick operator
+//3. Still display current number
+//3. if operator exist display the current input.textContent to firstNum variable
+//4. after clicking the 2nd number remove the current num and display the 2nd num;
+//5. equal
