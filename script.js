@@ -38,6 +38,8 @@ function initCalculator() {
       const numButton = numList[i];
       numButton.addEventListener("click", () => {
         display.textContent += numButton.textContent;
+
+        setOperatorDisabled(false);
       });
     }
   }
@@ -56,6 +58,12 @@ function initCalculator() {
     }
   }
 
+  function setOperatorDisabled(disabled) {
+    for (let i = 0; i < opList.length; i++) {
+      opList[i].disabled = disabled;
+    }
+  }
+
   function setupEqualButton() {
     equalButton.addEventListener("click", () => {
       secondInput = Number(display.textContent);
@@ -64,7 +72,7 @@ function initCalculator() {
       firstInput = result;
     });
   }
-
+  setOperatorDisabled(true);
   setupNumberButtons();
   setupOperatorButtons();
   setupEqualButton();
