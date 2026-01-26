@@ -1,12 +1,7 @@
 const numList = document.querySelectorAll(".number");
 const display = document.querySelector(".display-input");
-const operatorButtons = document.querySelectorAll(".operator");
+const opList = document.querySelectorAll(".operator");
 const equalButton = document.querySelector(".equal");
-
-let firstInput = "";
-let secondInput = "";
-let op = "";
-let result = "";
 
 function add(a, b) {
   return a + b;
@@ -21,6 +16,7 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+  if (b === 0) return "Error";
   return a / b;
 }
 
@@ -31,46 +27,47 @@ function operate(first, second, operator) {
   if (operator === "/") return divide(first, second);
 }
 
-function numInput() {
-  for (let i = 0; i < numList.length; i++) {
-    numList[i].addEventListener("click", () => {
-      display.textContent += numList[i].textContent;
+function initCalculator() {
+  let firstInput = "";
+  let secondInput = "";
+  let op = "";
+  let result = "";
+
+  function setupNumberButtons() {
+    for (let i = 0; i < numList.length; i++) {
+      const numButton = numList[i];
+      numButton.addEventListener("click", () => {
+        display.textContent += numButton.textContent;
+      });
+    }
+  }
+
+  function setupOperatorButtons() {
+    for (let i = 0; i < opList.length; i++) {
+      const operatorButton = opList[i];
+      operatorButton.addEventListener("click", () => {
+        op = operatorButton.textContent;
+
+        if (op) {
+          firstInput = Number(display.textContent);
+          display.textContent = "";
+        }
+      });
+    }
+  }
+
+  function setupEqualButton() {
+    equalButton.addEventListener("click", () => {
+      secondInput = Number(display.textContent);
+      result = operate(firstInput, secondInput, op);
+      display.textContent = result;
+      firstInput = result;
     });
   }
+
+  setupNumberButtons();
+  setupOperatorButtons();
+  setupEqualButton();
 }
 
-function operator() {
-  for (let i = 0; i < operatorButtons.length; i++) {
-    operatorButtons[i].addEventListener("click", () => {
-      firstInput = Number(display.textContent);
-      console.log(firstInput);
-      op = operatorButtons[i].textContent;
-      console.log(op);
-      display.textContent = "";
-    });
-  }
-}
-
-function equal() {
-  equalButton.addEventListener("click", () => {
-    secondInput = Number(display.textContent);
-
-    result = operate(Number(firstInput), secondInput, op);
-
-    display.textContent = result;
-
-    firstInput = result;
-  });
-}
-
-numInput();
-operator();
-equal();
-
-
-//1. Insert first num
-//2. pick operator
-//3. Still display current number
-//3. if operator exist display the current input.textContent to firstNum variable
-//4. after clicking the 2nd number remove the current num and display the 2nd num;
-//5. equal
+initCalculator();
